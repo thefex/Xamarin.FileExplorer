@@ -1,19 +1,22 @@
 using System;
 using Foundation;
 using UIKit;
+using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
 	public class DirectoryContentViewController : UICollectionViewController
 	{
+		private readonly DirectoryContentViewModel _viewModel;
 		private UIToolbar toolbar;
 		private NSLayoutConstraint toolbarBottomConstraint;
 		bool isFirstLayout = true;
 
 		public UICollectionViewFlowLayout FlowLayout => CollectionView?.CollectionViewLayout as UICollectionViewFlowLayout;
 
-		public DirectoryContentViewController()
+		public DirectoryContentViewController(DirectoryContentViewModel viewModel)
 		{
+			_viewModel = viewModel;
 		}
 
 		public DirectoryContentViewController(NSCoder coder) : base(coder)

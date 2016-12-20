@@ -4,7 +4,10 @@ using System.Linq;
 using CoreFoundation;
 using Foundation;
 using UIKit;
+using Xamarin.iOS.FileExplorer.Config;
 using Xamarin.iOS.FileExplorer.Extensions;
+using Xamarin.iOS.FileExplorer.PresentationController;
+using Xamarin.iOS.FileExplorer.Services.File;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
@@ -26,9 +29,73 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 		public IEnumerable<string> IgnoredFileFilters { get; set; } = Enumerable.Empty<string>();
 
-		public FileExplorerViewController(NSUrl directoryUrl)
+		public IEnumerable<IFileSpecificationProvider> CustomSpecificationProviders { get; }
+
+		private ItemPresentationCoordinator itemPresentationCoordinator;
+
+		public FileExplorerViewController(NSUrl directoryUrl) : this(directoryUrl, Enumerable.Empty<IFileSpecificationProvider>())
 		{
 			
+		}
+
+		public FileExplorerViewController(NSUrl directoryUrl, IEnumerable<IFileSpecificationProvider> fileSpecificationProviders)
+		{
+			InitialDirectoryOfUrl = directoryUrl;
+			CustomSpecificationProviders = fileSpecificationProviders;
+		}
+
+		public override void ViewDidLoad()
+		{
+			base.ViewDidLoad();
+
+			View.BackgroundColor = UIColor.White;
+
+			var navigationController = new UINavigationController();
+			AddChildViewController(navigationController);
+			itemPresentationCoordinator = new ItemPresentationCoordinator(navigationController);
+			
+		}
+
+		public override void ViewWillAppear(bool animated)
+		{
+			base.ViewWillAppear(animated);
+
+			var fileSpecifications = new FileSpecifications();
+
+			var actionsConfiguration = new ActionsConfiguration()
+			{
+				CanRemoveFiles = CanRemoveFiles,
+				CanRemoveDirectories = CanRemoveDirectories,
+				CanChooseDirectories = CanChooseDirectories,
+				CanChooseFiles = CanChooseFiles,
+				AllowsMultipleSelection = AllowsMultipleSelection
+			};
+
+			var filteringConfiguration = new FilteringConfiguration()
+			{
+				FileFilters = FileFilters,
+				IgnoredFileFilters = IgnoredFileFilters
+			};
+
+			var configuration = new Configuration()
+			{
+				ActionsConfiguration = actionsConfiguration,
+				FilteringConfiguration = filteringConfiguration
+			};
+		}
+
+		public event Action Finished;
+
+		protected virtual void OnFinished()
+		{
+			Finished?.Invoke();
+		}
+
+		public event Action<IEnumerable<NSUrl>> FilesChoosed;
+
+		protected virtual void OnFilesChoosed(IEnumerable<NSUrl> obj)
+		{
+			FilesChoosed?.Invoke(obj);
 		}
 	}
 }

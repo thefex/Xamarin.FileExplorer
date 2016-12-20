@@ -9,7 +9,9 @@ namespace Xamarin.iOS.FileExplorer.PresentationController
 
 	public class ItemPresentationCoordinator
 	{
-		
-
+		public ItemPresentationCoordinator(UINavigationController navigationController)
+		{
+			
+		}
 	}
 }

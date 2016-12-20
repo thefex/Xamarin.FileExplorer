@@ -7,9 +7,9 @@ namespace Xamarin.iOS.FileExplorer.Data
 	public class Item<T>
 	{
 		private readonly NSFileAttributes _attributes;
-		private readonly Func<NSFileAttributes, NSData, NSUrl, T> _parse;
+		private readonly Func<NSFileAttributes, NSData, NSUrl[], T> _parse;
 
-		public Item(NSUrl url, NSFileAttributes attributes, ItemType type, Func<NSFileAttributes, NSData, NSUrl, T> parse)
+		public Item(NSUrl url, NSFileAttributes attributes, ItemType type, Func<NSFileAttributes, NSData, NSUrl[], T> parse)
 		{
 			Url = url;
 			_attributes = attributes;
@@ -28,7 +28,7 @@ namespace Xamarin.iOS.FileExplorer.Data
 
 		public ItemType Type { get; }
 
-		public T Parse(NSFileAttributes fileAttributes, NSData data, NSUrl url) => _parse(fileAttributes, data, url);
+		public T Parse(NSFileAttributes fileAttributes, NSData data, NSUrl[] url) => _parse(fileAttributes, data, url);
 
 		public override bool Equals(object obj)
 		{

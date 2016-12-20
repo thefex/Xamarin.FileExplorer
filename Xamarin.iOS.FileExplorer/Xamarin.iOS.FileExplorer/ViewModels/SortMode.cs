@@ -1,6 +1,6 @@
 namespace Xamarin.iOS.FileExplorer.ViewModels
 {
-	enum SortMode
+	public enum SortMode
 	{
 		Name,
 		Date
