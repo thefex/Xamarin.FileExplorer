@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A1336966-D1AC-4A89-928C-044406674E8F}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Xamarin.iOS.FileExplorer</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>Xamarin.iOS.FileExplorer</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.iOS" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\ActionsConfiguration.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="CustomViews\CheckmarkButton.cs" />
+    <Compile Include="CustomViews\ColorPallete.cs" />
+    <Compile Include="CustomViews\ItemCell.cs" />
+    <Compile Include="CustomViews\Thumbnails\BorderGenerator.cs" />
+    <Compile Include="CustomViews\Thumbnails\IThumbnailGenerator.cs" />
+    <Compile Include="CustomViews\Thumbnails\PdfThumbnailGenerator.cs" />
+    <Compile Include="CustomViews\Thumbnails\StaticImageThumbnailGenerator.cs" />
+    <Compile Include="CustomViews\Thumbnails\ImageThumbnailGenerator.cs" />
+    <Compile Include="CustomViews\Thumbnails\VideoThumbnailGenerator.cs" />
+    <Compile Include="Data\Item.cs" />
+    <Compile Include="Data\ItemType.cs" />
+    <Compile Include="Config\ExtensionFilter.cs" />
+    <Compile Include="Extensions\FileSpecificationProviderExtensions.cs" />
+    <Compile Include="Extensions\NSUrlExtensions.cs" />
+    <Compile Include="Extensions\UIBezierPathExtensions.cs" />
+    <Compile Include="Extensions\UiToolbarExtensions.cs" />
+    <Compile Include="Extensions\UiViewControllerExtensions.cs" />
+    <Compile Include="Extensions\UiViewExtensions.cs" />
+    <Compile Include="Config\Filter.cs" />
+    <Compile Include="Config\FilteringConfiguration.cs" />
+    <Compile Include="Config\FilterType.cs" />
+    <Compile Include="Config\LastPathComponentFilter.cs" />
+    <Compile Include="Config\ModificationDatePastFilter.cs" />
+    <Compile Include="Config\ModificationDatePastOrEqualToFilter.cs" />
+    <Compile Include="Config\ModificationDatePriorToFilter.cs" />
+    <Compile Include="Config\ModificationDatePriorToOrEqualFilter.cs" />
+    <Compile Include="PresentationController\DirectoryItemPresentationCoordinator.cs" />
+    <Compile Include="Services\File\AudioSpecificationProvider.cs" />
+    <Compile Include="Services\File\DefaultFileSpecificationProvider.cs" />
+    <Compile Include="Services\File\FileSpecifications.cs" />
+    <Compile Include="Services\File\ImageSpecificationProvider.cs" />
+    <Compile Include="Services\File\PdfSpecificationProvider.cs" />
+    <Compile Include="Services\File\VideoSpecificationProvider.cs" />
+    <Compile Include="Services\ItemPresentationCoordinator.cs" />
+    <Compile Include="Config\TypeFilter.cs" />
+    <Compile Include="ViewControllers\UnknownFileTypeViewController.cs" />
+    <Compile Include="ViewControllers\ActionsViewController.cs" />
+    <Compile Include="ViewControllers\DirectoryContentViewController.cs" />
+    <Compile Include="ViewControllers\FileExplorerViewController.cs" />
+    <Compile Include="Services\File\IFileSpecificationProvider.cs" />
+    <Compile Include="ViewControllers\ImageViewController.cs" />
+    <Compile Include="ViewModels\DirectoryContentViewModel.cs" />
+    <Compile Include="ViewModels\FileViewModel.cs" />
+    <Compile Include="ViewModels\ItemViewModel.cs" />
+    <Compile Include="ViewModels\SortMode.cs" />
+    <Compile Include="ViewControllers\WebViewController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+</Project>
