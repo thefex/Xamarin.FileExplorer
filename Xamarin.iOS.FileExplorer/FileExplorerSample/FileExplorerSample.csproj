@@ -101,13 +101,5 @@
   <ItemGroup>
     <Content Include="Entitlements.plist" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Xamarin.iOS.FileExplorer\Xamarin.iOS.FileExplorer.csproj">
-      <Project>{a1336966-d1ac-4a89-928c-044406674e8f}</Project>
-      <Name>Xamarin.iOS.FileExplorer</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
