@@ -5,7 +5,7 @@ using UIKit;
 
 namespace Xamarin.iOS.FileExplorer.CustomViews
 {
-	public sealed class CollectionViewFooter : UICollectionReusableView
+    public sealed class CollectionViewFooter : UICollectionReusableView
 	{
 		nfloat leftInset = 0;
 		readonly IList<SeparatorView> separators = new List<SeparatorView>();
