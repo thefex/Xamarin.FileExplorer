@@ -1,25 +1,31 @@
 using System;
+using CoreGraphics;
 using Foundation;
 using UIKit;
+using Xamarin.iOS.FileExplorer.CustomViews;
+using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-	public class DirectoryContentViewController : UICollectionViewController
+	public class DirectoryContentViewController : UICollectionViewController, IUISearchResultsUpdating
 	{
-		private readonly DirectoryContentViewModel _viewModel;
+	    private const string Itemcellidentifier = "ItemCellIdentifier";
+	    private readonly DirectoryContentViewModel _viewModel;
 		private UIToolbar toolbar;
 		private NSLayoutConstraint toolbarBottomConstraint;
 		bool isFirstLayout = true;
 
 		public UICollectionViewFlowLayout FlowLayout => CollectionView?.CollectionViewLayout as UICollectionViewFlowLayout;
 
-		public DirectoryContentViewController(DirectoryContentViewModel viewModel)
-		{
-			_viewModel = viewModel;
-		}
+	    public DirectoryContentViewController(DirectoryContentViewModel viewModel) :
+	        base(new UICollectionViewFlowLayout {ItemSize = new CGSize(200, 64), MinimumLineSpacing = 0})
+	    {
+	        _viewModel = viewModel;
+	        toolbar = UiToolbarExtensions.MakeToolbar();
+	    }
 
-		public DirectoryContentViewController(NSCoder coder) : base(coder)
+	    public DirectoryContentViewController(NSCoder coder) : base(coder)
 		{
 		}
 
@@ -42,10 +48,19 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 		public override void ViewDidLayoutSubviews()
 		{
 			base.ViewDidLayoutSubviews();
-			if ( FlowLayout == null)
-				return;
+		    if (FlowLayout == null)
+		    {
+                return;
+            }
+		    ExtendedLayoutIncludesOpaqueBars = false;
+            EdgesForExtendedLayout = UIRectEdge.None;
+		    CollectionView.BackgroundColor = UIColor.White;
+            CollectionView.RegisterClassForCell(typeof(ItemCell), Itemcellidentifier);
+  	}
 
-		//	FlowLayout.ItemSize
-		}
+	    public void UpdateSearchResultsForSearchController(UISearchController searchController)
+	    {
+	        
+	    }
 	}
 }

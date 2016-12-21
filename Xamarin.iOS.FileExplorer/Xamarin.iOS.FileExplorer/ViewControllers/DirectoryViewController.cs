@@ -19,18 +19,16 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 
 		public DirectoryViewController(DirectoryViewModel directoryViewModel)
-		{
+        {
 			viewModel = directoryViewModel;
 
 			searchResultsViewModel = viewModel.BuildDirectoryContentViewModel();
 			searchResultsViewController = new DirectoryContentViewController(searchResultsViewModel);
 			searchController = new UISearchController(searchResultsViewController);
-			//searchController.SearchResultsUpdater = searchResultsViewController;
+			searchController.SearchResultsUpdater = searchResultsViewController;
 
 			directoryContentViewModel = viewModel.BuildDirectoryContentViewModel();
 			directoryContentViewController = new DirectoryContentViewController(directoryContentViewModel);
-
-			
 		}
 
 		public DirectoryViewController(NSCoder coder) : base(coder)
