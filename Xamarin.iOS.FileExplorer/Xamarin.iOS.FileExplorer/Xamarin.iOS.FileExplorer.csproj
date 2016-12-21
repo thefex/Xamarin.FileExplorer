@@ -66,6 +66,8 @@
     <Compile Include="Extensions\NSUrlExtensions.cs" />
     <Compile Include="Extensions\UIAlertExtensions.cs" />
     <Compile Include="Extensions\UIBezierPathExtensions.cs" />
+    <Compile Include="Extensions\UICollectionViewExtended.cs" />
+    <Compile Include="Extensions\UICollectionViewExtensions.cs" />
     <Compile Include="Extensions\UiToolbarExtensions.cs" />
     <Compile Include="Extensions\UiViewControllerExtensions.cs" />
     <Compile Include="Extensions\UiViewExtensions.cs" />
