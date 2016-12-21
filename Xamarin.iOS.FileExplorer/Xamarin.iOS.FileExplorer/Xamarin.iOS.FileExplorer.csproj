@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Config\ActionsConfiguration.cs" />
     <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\CustomErrors.cs" />
     <Compile Include="CustomViews\CheckmarkButton.cs" />
     <Compile Include="CustomViews\CollectionViewFooter.cs" />
     <Compile Include="CustomViews\ColorPallete.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Data\Result.cs" />
     <Compile Include="Extensions\FileSpecificationProviderExtensions.cs" />
     <Compile Include="Extensions\NSUrlExtensions.cs" />
+    <Compile Include="Extensions\UIAlertExtensions.cs" />
     <Compile Include="Extensions\UIBezierPathExtensions.cs" />
     <Compile Include="Extensions\UiToolbarExtensions.cs" />
     <Compile Include="Extensions\UiViewControllerExtensions.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Services\ItemPresentationCoordinator.cs" />
     <Compile Include="Config\TypeFilter.cs" />
     <Compile Include="ViewControllers\DirectoryViewController.cs" />
+    <Compile Include="ViewControllers\ErrorViewController.cs" />
+    <Compile Include="ViewControllers\LoadingViewController.cs" />
     <Compile Include="ViewControllers\UnknownFileTypeViewController.cs" />
     <Compile Include="ViewControllers\ActionsViewController.cs" />
     <Compile Include="ViewControllers\DirectoryContentViewController.cs" />

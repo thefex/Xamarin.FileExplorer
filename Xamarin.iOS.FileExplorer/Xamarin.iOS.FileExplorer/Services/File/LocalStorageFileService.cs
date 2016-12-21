@@ -8,7 +8,7 @@ using Xamarin.iOS.FileExplorer.Data;
 
 namespace Xamarin.iOS.FileExplorer.Services.File
 {
-	public class LocalStorageFileService : IFileService
+	public class LocalStorageFileService<T> : IFileService<T>
 	{
 		private readonly NSFileManager _fileManager;
 
@@ -22,42 +22,41 @@ namespace Xamarin.iOS.FileExplorer.Services.File
 			_fileManager = fileManager;
 		}
 
-		public async Task<LoadedItem<object>> Load(Item<object> item)
+		public Result<LoadedItem<T>> Load(Item<T> item)
 		{
-			object resultObject = null;
+			T resultObject = default(T);
 			NSFileAttributes attributes = null;
-			await Task.Run(() =>
+			 
+			attributes = _fileManager.GetAttributes(item.Url.Path);
+
+			if (item.Type == ItemType.Directory)
 			{
-				attributes = _fileManager.GetAttributes(item.Url.Path);
+				NSString[] properties = new[] {NSUrl.IsDirectoryKey, NSUrl.ContentModificationDateKey};
+				NSError error = null;
+				var urls = _fileManager.GetDirectoryContent(item.Url, NSArray.FromNSObjects(properties),
+					NSDirectoryEnumerationOptions.SkipsHiddenFiles,
+					out error);
 
-				if (item.Type == ItemType.Directory)
-				{
-					NSString[] properties = new[] {NSUrl.IsDirectoryKey, NSUrl.ContentModificationDateKey};
-					NSError error = null;
-					var urls = _fileManager.GetDirectoryContent(item.Url, NSArray.FromNSObjects(properties),
-						NSDirectoryEnumerationOptions.SkipsHiddenFiles,
-						out error);
+				resultObject = item.Parse(attributes, null, urls);
+			}
+			else
+			{
+				var data = NSData.FromUrl(item.Url);
+				resultObject = item.Parse(attributes, data, null);
+			}
 
-					resultObject = item.Parse(attributes, null, urls);
-				}
-				else
-				{
-					var data = NSData.FromUrl(item.Url);
-					resultObject = item.Parse(attributes, data, null);
-				}
-			});
-			return new LoadedItem<object>(item, attributes, resultObject);
+			return new Result<LoadedItem<T>>(new LoadedItem<T>(item, attributes, resultObject));
 		}
 
-		public void Delete(IEnumerable<Item<object>> itemsToDelete, Action<LoadedItem<object>> completionHandler)
+		public void Delete(IEnumerable<Item<T>> itemsToDelete, Action<LoadedItem<T>> completionHandler)
 		{
 			if (IsDeletionInProgress)
 				return;
 
 			IsDeletionInProgress = true;
 
-			IList<Item<object>> deletedItems = new List<Item<object>>();
-			IList<Item<object>> itemsNotDeletedDueToFailure = new List<Item<object>>();
+			IList<Item<T>> deletedItems = new List<Item<T>>();
+			IList<Item<T>> itemsNotDeletedDueToFailure = new List<Item<T>>();
 
 
 			DispatchQueue.DefaultGlobalQueue.DispatchAsync(() =>

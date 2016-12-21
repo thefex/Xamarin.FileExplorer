@@ -6,6 +6,8 @@ namespace Xamarin.iOS.FileExplorer.Data
 
 		public T ResultObject { get; }
 
+		public string ErrorMessage { get; private set; } = string.Empty;
+
 		private Result()
 		{
 			
@@ -16,6 +18,9 @@ namespace Xamarin.iOS.FileExplorer.Data
 			ResultObject = result;
 		}
 
-		public static Result<T> BuildFailedResult() => new Result<T>();
+		public static Result<T> BuildFailedResult(string errorMessage = "") => new Result<T>()
+		{
+			ErrorMessage = errorMessage
+		};
 	}
 }

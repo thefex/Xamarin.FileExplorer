@@ -14,15 +14,15 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 		private readonly NSUrl url;
 		private readonly Configuration configuration = new Configuration();
 		private readonly FileSpecifications _fileSpecifications;
-		private readonly IFileService _fileService;
+		private readonly IFileService<object> _fileService;
 
 		public DirectoryContentViewModel(LoadedItem<object> loadedDirectoryItem, FileSpecifications fileSpecifications, Configuration configuration) 
-			: this(loadedDirectoryItem, fileSpecifications, configuration, new LocalStorageFileService())
+			: this(loadedDirectoryItem, fileSpecifications, configuration, new LocalStorageFileService<object>())
 		{
 			
 		}
 
-		public DirectoryContentViewModel(LoadedItem<object> loadedDirectoryItem, FileSpecifications fileSpecifications, Configuration configuration, IFileService fileService)
+		public DirectoryContentViewModel(LoadedItem<object> loadedDirectoryItem, FileSpecifications fileSpecifications, Configuration configuration, IFileService<object> fileService)
 		{
 			url = loadedDirectoryItem.Url;
 			_fileSpecifications = fileSpecifications;

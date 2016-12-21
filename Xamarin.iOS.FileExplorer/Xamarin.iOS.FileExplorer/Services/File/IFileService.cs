@@ -5,11 +5,11 @@ using Xamarin.iOS.FileExplorer.Data;
 
 namespace Xamarin.iOS.FileExplorer.Services.File
 {
-	public interface IFileService
+	public interface IFileService<T>
 	{
-		Task<LoadedItem<object>> Load(Item<object> item);
+		Result<LoadedItem<T>> Load(Item<T> item);
 
-		void Delete(IEnumerable<Item<object>> itemsToDelete, Action<LoadedItem<object>> completionHandler);
+		void Delete(IEnumerable<Item<T>> itemsToDelete, Action<LoadedItem<T>> completionHandler);
 
 		bool IsDeletionInProgress { get; }
 	}
