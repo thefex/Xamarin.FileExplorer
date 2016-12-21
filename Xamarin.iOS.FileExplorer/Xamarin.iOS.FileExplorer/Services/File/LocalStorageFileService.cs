@@ -8,6 +8,14 @@ using Xamarin.iOS.FileExplorer.Data;
 
 namespace Xamarin.iOS.FileExplorer.Services.File
 {
+    public class DeleteResult<T>
+    {
+        public IEnumerable<Item<T>> RemovedItems { get; set; }
+        public IEnumerable<Item<T>> NotRemovedItems { get; set; }
+        public string ErrorMessage { get; set; }
+        public bool IsSuccess => string.IsNullOrWhiteSpace(ErrorMessage);
+    }
+
 	public class LocalStorageFileService<T> : IFileService<T>
 	{
 		private readonly NSFileManager _fileManager;
@@ -48,7 +56,7 @@ namespace Xamarin.iOS.FileExplorer.Services.File
 			return new Result<LoadedItem<T>>(new LoadedItem<T>(item, attributes, resultObject));
 		}
 
-		public void Delete(IEnumerable<Item<T>> itemsToDelete, Action<LoadedItem<T>> completionHandler)
+		public void Delete(IEnumerable<Item<T>> itemsToDelete, Action<DeleteResult<T>> completionHandler)
 		{
 			if (IsDeletionInProgress)
 				return;
@@ -67,7 +75,7 @@ namespace Xamarin.iOS.FileExplorer.Services.File
 					{
 						NSError error;
 						_fileManager.Remove(item.Url, out error);
-						deletedItems.Remove(item);
+						deletedItems.Add(item);
 					}
 					catch (Exception e)
 					{
@@ -84,11 +92,16 @@ namespace Xamarin.iOS.FileExplorer.Services.File
 						NSArray.FromObject(deletedItems.ToArray())));
 				}
 				IsDeletionInProgress = false;
-
-				if (itemsNotDeletedDueToFailure.Count > 0)
-				{
-					
-				}
+                var deleteResult = new DeleteResult<T>
+                {
+                    NotRemovedItems = itemsNotDeletedDueToFailure,
+                    RemovedItems = deletedItems
+                };
+			    if (itemsNotDeletedDueToFailure.Any())
+			    {
+			        deleteResult.ErrorMessage = "Failed to remove " + itemsNotDeletedDueToFailure.Count + " items";
+			    }
+                completionHandler?.Invoke(deleteResult);
 			});
 		}
 
