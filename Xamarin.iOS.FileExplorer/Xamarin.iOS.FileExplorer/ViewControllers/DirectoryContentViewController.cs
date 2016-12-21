@@ -34,8 +34,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         {
             this.viewModel = viewModel;
             toolbar = UiToolbarExtensions.MakeToolbar();
-            CollectionViewExtended = new UICollectionViewExtended(CollectionView.Frame, CollectionView.CollectionViewLayout);
-            CollectionView = CollectionViewExtended;
+
         }
 
         public DirectoryContentViewController(NSCoder coder) : base(coder)
@@ -68,10 +67,12 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
             ExtendedLayoutIncludesOpaqueBars = false;
             EdgesForExtendedLayout = UIRectEdge.None;
 
-            CollectionViewExtended.BackgroundColor = UIColor.White;
+			CollectionViewExtended = new UICollectionViewExtended(CollectionView.Frame, CollectionView.CollectionViewLayout);
+			CollectionView = CollectionViewExtended;
+
+			CollectionViewExtended.BackgroundColor = UIColor.White;
             CollectionViewExtended.RegisterCell<ItemCell>();
-            // TODO
-            // CollectionViewExtended.RegisterHeader<CollectionViewHeader>();
+  //          CollectionViewExtended.RegisterHeader<CollectionViewHeader>();
              CollectionViewExtended.RegisterFooter<CollectionViewFooter>();
             CollectionViewExtended.AlwaysBounceVertical = true;
             CollectionViewExtended.AllowsMultipleSelection = true;
