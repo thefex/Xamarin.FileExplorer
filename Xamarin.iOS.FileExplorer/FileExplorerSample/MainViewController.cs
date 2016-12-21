@@ -45,7 +45,7 @@ namespace FileExplorerSample
 
 		private void Button_TouchUpInside(object sender, EventArgs e)
 		{
-			FileExplorerViewController fileExplorer = new FileExplorerViewController();
+            var fileExplorer = new FileExplorerViewController();
 			PresentViewController(fileExplorer, true, () => { });
 		}
 	}
