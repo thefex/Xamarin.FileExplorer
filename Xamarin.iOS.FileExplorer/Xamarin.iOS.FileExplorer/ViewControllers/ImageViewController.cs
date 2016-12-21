@@ -63,7 +63,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 		public UIView ViewForZomming(UIScrollView sv) => imageView;
 
 		[Export("scrollViewDidZoom:")]
-		public void DidEndZooming(UIScrollView sv, UIView withView, nfloat atScale)
+		public void DidEndZooming(UIScrollView sv)
 		{
 			
 		}

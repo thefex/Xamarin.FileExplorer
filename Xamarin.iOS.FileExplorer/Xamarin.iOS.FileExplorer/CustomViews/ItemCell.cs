@@ -1,6 +1,5 @@
 using System;
 using CoreGraphics;
-using Foundation;
 using UIKit;
 
 namespace Xamarin.iOS.FileExplorer.CustomViews
@@ -13,19 +12,22 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			DisclousoureIndicator
 		}
 
-		UITapGestureRecognizer accessoryImageViewTapRecognizer;
-		UIView containerView;
+		private UIImageView accessoryImageView;
+
+		private UITapGestureRecognizer accessoryImageViewTapRecognizer;
+		private CheckmarkButton checkmarkButton;
+		private UIView containerView;
+
+		private NSLayoutConstraint containerViewLeadingConstraint;
+		private NSLayoutConstraint containerViewTrailingConstraint;
+		private AccessoryType customAccessoryType = AccessoryType.DetailButton;
+
+		private UIImageView iconImageView;
+
+		private bool isEditing;
 		private SeparatorView separatorView;
-
-		UIImageView iconImageView;
-		UILabel textLabel;
-		UILabel subtitleTextLabel;
-		UIImageView accessoryImageView;
-		AccessoryType customAccessoryType = AccessoryType.DetailButton;
-		CheckmarkButton checkmarkButton;
-
-		NSLayoutConstraint containerViewLeadingConstraint;
-		NSLayoutConstraint containerViewTrailingConstraint;
+		private UILabel subtitleTextLabel;
+		private UILabel textLabel;
 
 		protected internal ItemCell(IntPtr handle) : base(handle)
 		{
@@ -37,26 +39,112 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			Initialize(frame);
 		}
 
+		public string Title
+		{
+			get { return textLabel.Text; }
+			set { textLabel.Text = value; }
+		}
+
+		public string Subtitle
+		{
+			get { return subtitleTextLabel.Text; }
+			set { subtitleTextLabel.Text = value; }
+		}
+
+		public UIImage IconImage
+		{
+			get { return iconImageView.Image; }
+			set { iconImageView.Image = value; }
+		}
+
+		public override bool Selected
+		{
+			get { return base.Selected; }
+
+			set
+			{
+				base.Selected = value;
+				checkmarkButton.Selected = value;
+				SetNeedsLayout();
+			}
+		}
+
+		public bool IsEditing
+		{
+			get { return isEditing; }
+			set
+			{
+				isEditing = value;
+				containerViewLeadingConstraint.Constant = isEditing ? 38 : 0;
+				containerViewTrailingConstraint.Constant = isEditing ? 38 : 0;
+				SetNeedsLayout();
+			}
+		}
+
+
+		public AccessoryType Accessory
+		{
+			get { return customAccessoryType; }
+			set
+			{
+				customAccessoryType = value;
+				switch (value)
+				{
+					case AccessoryType.DetailButton:
+						accessoryImageView.Image = UIImage.FromBundle("DetailButtonImage");
+						accessoryImageViewTapRecognizer.Enabled = true;
+						break;
+					case AccessoryType.DisclousoureIndicator:
+						accessoryImageView.Image = UIImage.FromBundle("DisclosureButtonImage");
+						accessoryImageViewTapRecognizer.Enabled = false;
+						break;
+				}
+			}
+		}
+
+		public CGSize MaximumIconSize
+		{
+			get
+			{
+				var max = Math.Max(Math.Max(iconImageView.Frame.Width, iconImageView.Frame.Height), LayoutConstants.IconWidth);
+				return new CGSize(max, max);
+			}
+		}
+
+		public void SetEditing(bool editing, bool animated)
+		{
+			if (animated)
+			{
+				Animate(0.2f, () =>
+				{
+					IsEditing = editing;
+					LayoutIfNeeded();
+				});
+			}
+			else
+				IsEditing = editing;
+		}
+
 		private void Initialize(CGRect frame)
 		{
-			containerView = new UIView()
+			containerView = new UIView
 			{
 				BackgroundColor = UIColor.White
 			};
 
-			separatorView = new SeparatorView()
+			separatorView = new SeparatorView
 			{
 				BackgroundColor = ColorPallete.Gray
 			};
 			containerView.Add(separatorView);
 
-			iconImageView = new UIImageView()
+			iconImageView = new UIImageView
 			{
 				ContentMode = UIViewContentMode.ScaleAspectFit
 			};
 			containerView.Add(iconImageView);
 
-			textLabel = new UILabel()
+			textLabel = new UILabel
 			{
 				Lines = 1,
 				LineBreakMode = UILineBreakMode.MiddleTruncation,
@@ -64,7 +152,7 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			};
 			containerView.Add(textLabel);
 
-			subtitleTextLabel = new UILabel()
+			subtitleTextLabel = new UILabel
 			{
 				Lines = 1,
 				LineBreakMode = UILineBreakMode.MiddleTruncation,
@@ -73,7 +161,7 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			};
 			containerView.Add(subtitleTextLabel);
 
-			accessoryImageView = new UIImageView()
+			accessoryImageView = new UIImageView
 			{
 				ContentMode = UIViewContentMode.Center
 			};
@@ -165,96 +253,6 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			checkmarkButton.CenterYAnchor.ConstraintEqualTo(CenterYAnchor, 1).Active = true;
 		}
 
-		public string Title
-		{
-			get { return textLabel.Text; }
-			set { textLabel.Text = value; }
-		}
-
-		public string Subtitle
-		{
-			get { return subtitleTextLabel.Text; }
-			set { subtitleTextLabel.Text = value; }
-		}
-
-		public UIImage IconImage
-		{
-			get { return iconImageView.Image; }
-			set { iconImageView.Image = value; }
-		}
-
-		public override bool Selected
-		{
-			get
-			{
-				return base.Selected;
-			}
-
-			set
-			{
-				base.Selected = value;
-				checkmarkButton.Selected = value;
-				SetNeedsLayout();
-			}
-		}
-
-		private bool isEditing;
-		public bool IsEditing
-		{
-			get { return isEditing; }
-			set
-			{
-				isEditing = value;
-				containerViewLeadingConstraint.Constant = isEditing ? 38 : 0;
-				containerViewTrailingConstraint.Constant = isEditing ? 38 : 0;
-				SetNeedsLayout();
-			}
-		}
-
-		public void SetEditing(bool editing, bool animated)
-		{
-			if (animated)
-			{
-				UIView.Animate(0.2f, () =>
-				{
-					IsEditing = editing;
-					LayoutIfNeeded();
-				});
-			}
-			else
-				IsEditing = editing;
-		}
-
-		
-		public AccessoryType Accessory
-		{
-			get { return customAccessoryType; }
-			set
-			{
-				customAccessoryType = value;
-				switch (value)
-				{
-					case AccessoryType.DetailButton:
-						accessoryImageView.Image = UIImage.FromBundle("DetailButtonImage");
-						accessoryImageViewTapRecognizer.Enabled = true;
-						break;
-					case AccessoryType.DisclousoureIndicator:
-						accessoryImageView.Image = UIImage.FromBundle("DisclosureButtonImage");
-						accessoryImageViewTapRecognizer.Enabled = false;
-						break;
-				}
-			}
-		}
-
-		public CGSize MaximumIconSize
-		{
-			get
-			{
-				var max = Math.Max(Math.Max(iconImageView.Frame.Width, iconImageView.Frame.Height), LayoutConstants.IconWidth);
-				return new CGSize(max, max);
-			}
-		}
-
 		public override bool GestureRecognizerShouldBegin(UIGestureRecognizer gestureRecognizer)
 		{
 			return true;
@@ -262,9 +260,6 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 
 		private void HandleAccessoryImageTap()
 		{
-			
 		}
-
-		
 	}
 }

@@ -19,5 +19,6 @@
 &lt;/dict&gt;
 &lt;/plist&gt;
 </TargetiOSDevice>
+    <SelectedDevice>iPhone 6 iOS 10.1</SelectedDevice>
   </PropertyGroup>
 </Project>

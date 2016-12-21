@@ -33,6 +33,11 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 		private ItemPresentationCoordinator itemPresentationCoordinator;
 
+		public FileExplorerViewController() : this(NSFileManager.DefaultManager.GetUrls(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User).First())
+		{
+			
+		}
+
 		public FileExplorerViewController(NSUrl directoryUrl) : this(directoryUrl, Enumerable.Empty<IFileSpecificationProvider>())
 		{
 			
