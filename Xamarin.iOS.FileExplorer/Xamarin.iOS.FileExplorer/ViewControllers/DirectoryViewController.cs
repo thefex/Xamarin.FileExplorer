@@ -7,7 +7,7 @@ using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-	public class DirectoryViewController : UIViewController, IUISearchBarDelegate, IDirectoryViewControllerDelegate
+	public class DirectoryViewController : UIViewController, IUISearchBarDelegate
 	{
 		private DirectoryViewModel viewModel;
 
