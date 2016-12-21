@@ -62,6 +62,7 @@
     <Compile Include="Data\LoadedItem.cs" />
     <Compile Include="Data\Result.cs" />
     <Compile Include="Extensions\FileSpecificationProviderExtensions.cs" />
+    <Compile Include="Extensions\NSObjectExtensions.cs" />
     <Compile Include="Extensions\NSUrlExtensions.cs" />
     <Compile Include="Extensions\UIAlertExtensions.cs" />
     <Compile Include="Extensions\UIBezierPathExtensions.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Config\ModificationDatePriorToOrEqualFilter.cs" />
     <Compile Include="PresentationController\DirectoryItemPresentationCoordinator.cs" />
     <Compile Include="PresentationController\FileItemPresentationCoordinator.cs" />
+    <Compile Include="PresentationController\IDirectoryItemsPresentationCoordinatorDelegate.cs" />
     <Compile Include="PresentationController\ItemPresentationCoordinator.cs" />
     <Compile Include="Services\File\LocalStorageFileService.cs" />
     <Compile Include="Services\File\Specification\AudioSpecificationProvider.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Config\TypeFilter.cs" />
     <Compile Include="ViewControllers\DirectoryViewController.cs" />
     <Compile Include="ViewControllers\ErrorViewController.cs" />
+    <Compile Include="ViewControllers\IDirectoryViewControllerDelegate.cs" />
     <Compile Include="ViewControllers\LoadingViewController.cs" />
     <Compile Include="ViewControllers\UnknownFileTypeViewController.cs" />
     <Compile Include="ViewControllers\ActionsViewController.cs" />
