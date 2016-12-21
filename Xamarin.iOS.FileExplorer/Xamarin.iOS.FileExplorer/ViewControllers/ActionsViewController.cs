@@ -4,7 +4,13 @@ using Xamarin.iOS.FileExplorer.Extensions;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-	public class ActionsViewController : UIViewController
+    public interface IActionsViewControllerDelegate
+    {
+        void ActionsViewControllerDidRequestRemoval(ActionsViewController controller);
+        void ActionsViewControllerDidRequestShare(ActionsViewController controller);
+    }
+
+public class ActionsViewController : UIViewController
 	{
 		private readonly UIViewController _contentViewController;
 		private readonly UIToolbar _toolbar = new UIToolbar();
@@ -43,19 +49,16 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			NavigationItem.Title = _contentViewController.NavigationItem.Title;
 		}
 
-
-		public event Action ShareButtonTapped;
-
-		public event Action TrashButtonTapped;
+        public IActionsViewControllerDelegate ActionsViewControllerDelegate { get; set; }
 
 		protected virtual void OnShareButtonTapped()
 		{
-			ShareButtonTapped?.Invoke();
+		    ActionsViewControllerDelegate?.ActionsViewControllerDidRequestShare(this);
 		}
 
 		protected virtual void OnTrashButtonTapped()
 		{
-			TrashButtonTapped?.Invoke();
-		}
-	}
+            ActionsViewControllerDelegate?.ActionsViewControllerDidRequestRemoval(this);
+        }
+    }
 }
