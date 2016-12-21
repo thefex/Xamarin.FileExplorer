@@ -75,6 +75,8 @@
     <Compile Include="Config\ModificationDatePriorToFilter.cs" />
     <Compile Include="Config\ModificationDatePriorToOrEqualFilter.cs" />
     <Compile Include="PresentationController\DirectoryItemPresentationCoordinator.cs" />
+    <Compile Include="PresentationController\FileItemPresentationCoordinator.cs" />
+    <Compile Include="PresentationController\ItemPresentationCoordinator.cs" />
     <Compile Include="Services\File\LocalStorageFileService.cs" />
     <Compile Include="Services\File\Specification\AudioSpecificationProvider.cs" />
     <Compile Include="Services\File\Specification\DefaultFileSpecificationProvider.cs" />
