@@ -7,6 +7,7 @@ using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.Services.File;
 using Xamarin.iOS.FileExplorer.ViewControllers;
+using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.PresentationController
 {
@@ -52,6 +53,17 @@ namespace Xamarin.iOS.FileExplorer.PresentationController
 	                throw new InvalidDataException();
 	        }
 	    }
+
+		public void StartDetailsPreview(bool animated)
+		{
+			var fileSpecification = fileSpecifications.GetFileSpecificationProvider<object>(item);
+			var viewController = MakePresentingViewController(item, loadedItem =>
+			{
+				return new UIViewController();
+				//var viewModel = new FileViewModel(loadedItem, fileSpecification);
+				//return new FileViewController
+			});
+		}
 
 	    private UIViewController MakePresentingViewController(Item<object> item,
 	        Func<LoadedItem<object>, UIViewController> builder)

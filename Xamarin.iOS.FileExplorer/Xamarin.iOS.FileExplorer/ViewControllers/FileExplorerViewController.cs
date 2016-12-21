@@ -5,6 +5,7 @@ using CoreFoundation;
 using Foundation;
 using UIKit;
 using Xamarin.iOS.FileExplorer.Config;
+using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.PresentationController;
 using Xamarin.iOS.FileExplorer.Services.File;
@@ -56,7 +57,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			View.BackgroundColor = UIColor.White;
 
 			var navigationController = new UINavigationController();
-			AddChildViewController(navigationController);
+			this.AddContentChildViewController(navigationController, new UIEdgeInsets());
 			itemPresentationCoordinator = new ItemPresentationCoordinator(navigationController);
 			
 		}
@@ -87,6 +88,19 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 				ActionsConfiguration = actionsConfiguration,
 				FilteringConfiguration = filteringConfiguration
 			};
+
+			var itemToExplore = Item<object>.At(InitialDirectoryOfUrl, isDirectory: true);
+
+			if (itemToExplore != null)
+				itemPresentationCoordinator.Start(itemToExplore, fileSpecifications, configuration, false);
+			else
+				throw new InvalidOperationException("Passed url is incorrect.");
+		}
+
+		public override void ViewDidDisappear(bool animated)
+		{
+			base.ViewDidDisappear(animated);
+			itemPresentationCoordinator.Stop(false);
 		}
 
 		public event Action Finished;

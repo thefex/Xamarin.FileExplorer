@@ -82,6 +82,7 @@
     <Compile Include="PresentationController\DirectoryItemPresentationCoordinator.cs" />
     <Compile Include="PresentationController\FileItemPresentationCoordinator.cs" />
     <Compile Include="PresentationController\IDirectoryItemsPresentationCoordinatorDelegate.cs" />
+    <Compile Include="PresentationController\IItemsPresentationCoordinator.cs" />
     <Compile Include="PresentationController\ItemPresentationCoordinator.cs" />
     <Compile Include="Services\File\LocalStorageFileService.cs" />
     <Compile Include="Services\File\Specification\AudioSpecificationProvider.cs" />

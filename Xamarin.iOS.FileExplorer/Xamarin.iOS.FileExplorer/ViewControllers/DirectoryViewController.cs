@@ -1,8 +1,7 @@
 using System;
 using Foundation;
 using UIKit;
-using Xamarin.iOS.FileExplorer.Data;
-using Xamarin.iOS.FileExplorer.PresentationController;
+using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
@@ -56,7 +55,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			EdgesForExtendedLayout = UIRectEdge.None;
 
 			SetupSearchBarController();
-			AddChildViewController(directoryContentViewController);
+			this.AddContentChildViewController(directoryContentViewController, new UIEdgeInsets(searchController.SearchBar.Bounds.Height, 0,0,0));
 			NavigationItem.RightBarButtonItem = directoryContentViewController.NavigationItem.RightBarButtonItem;
 			NavigationItem.Title = directoryContentViewController.NavigationItem.Title;
 			Add(directoryContentViewController.View);

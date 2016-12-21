@@ -72,7 +72,7 @@ namespace Xamarin.iOS.FileExplorer.Data
 			return new Item<object>(url, attributes, ItemType.File, (fileAttributes, data, urls) => data);
 		}
 
-		public static Item<object> At(NSUrl url, NSFileAttributes attributes, bool isDirectory = false)
+		public static Item<object> At(NSUrl url, NSFileAttributes attributes = null, bool isDirectory = false)
 		{
 			return isDirectory ? FromDirectory(url, attributes) : FromFile(url, attributes, isDirectory);
 		}

@@ -18,7 +18,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			else
 			{
 				var contentViewController = builder(loadedItemResult.ResultObject);
-				this.AddChildViewController(contentViewController);
+				this.AddContentChildViewController(contentViewController, new UIEdgeInsets());
 				NavigationItem.Title = contentViewController.NavigationItem.Title;
 				NavigationItem.RightBarButtonItems = contentViewController.NavigationItem.RightBarButtonItems;
 				NavigationItem.LeftBarButtonItems = contentViewController.NavigationItem.LeftBarButtonItems;

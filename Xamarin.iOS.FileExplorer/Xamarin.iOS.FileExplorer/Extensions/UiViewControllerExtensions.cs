@@ -1,9 +1,19 @@
+using CoreGraphics;
 using UIKit;
 
 namespace Xamarin.iOS.FileExplorer.Extensions
 {
 	public static class UiViewControllerExtensions
 	{
+		public static void AddContentChildViewController(this UIViewController parent, UIViewController contentViewController, UIEdgeInsets edgeInsets)
+		{
+			var view = parent.View;
+			view.Add(contentViewController.View);
+			contentViewController.View.Frame = edgeInsets.InsetRect(view.Frame);
+			contentViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			contentViewController.DidMoveToParentViewController(parent);
+		}
+
 		public static void ShowLoadingIndicator(this UIViewController controller)
 		{
 			

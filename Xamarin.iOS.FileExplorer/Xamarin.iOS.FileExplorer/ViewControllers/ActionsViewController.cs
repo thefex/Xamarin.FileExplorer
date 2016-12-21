@@ -45,7 +45,7 @@ public class ActionsViewController : UIViewController
 				new UIBarButtonItem(UIBarButtonSystemItem.Trash, (e, a) => { OnTrashButtonTapped(); })
 			};
 
-			AddChildViewController(_contentViewController);
+			this.AddContentChildViewController(_contentViewController, new UIEdgeInsets(top: 0, left: 0, bottom: _toolbar.Bounds.Height, right: 0));
 			NavigationItem.Title = _contentViewController.NavigationItem.Title;
 		}
 
