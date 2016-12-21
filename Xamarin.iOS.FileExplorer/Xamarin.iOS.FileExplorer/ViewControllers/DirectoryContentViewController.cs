@@ -3,31 +3,24 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 using Xamarin.iOS.FileExplorer.CustomViews;
-using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-    public interface IDirectoryContentViewControllerDelegate
-    {
-        void ChangedEditingStatus(DirectoryContentViewController controller, bool isEditing);
-        void SelectedItem(DirectoryContentViewController controller, Item<object> item);
-        void SelectedItemDetails(DirectoryContentViewController controller, Item<object> item);
-        void ChoosedItems(DirectoryContentViewController controller, Item<object> item);
-    }
-
     public class DirectoryContentViewController : UICollectionViewController, 
                                                   IUISearchResultsUpdating
     {
-        private const string Itemcellidentifier = "ItemCellIdentifier";
+        public IDirectoryContentViewControllerDelegate DirectoryContentViewControllerDelegate { get; set; }
+
         private readonly DirectoryContentViewModel viewModel;
         private UIToolbar toolbar;
         private NSLayoutConstraint toolbarBottomConstraint;
         bool isFirstLayout = true;
         private UICollectionViewExtended CollectionViewExtended;
 
-        public UICollectionViewFlowLayout FlowLayout => CollectionView?.CollectionViewLayout as UICollectionViewFlowLayout;
+        public UICollectionViewFlowLayout CollectionViewFlowLayout
+            => CollectionView?.CollectionViewLayout as UICollectionViewFlowLayout;
 
         public DirectoryContentViewController(DirectoryContentViewModel viewModel) :
             base(new UICollectionViewFlowLayout { ItemSize = new CGSize(200, 64), MinimumLineSpacing = 0 })
@@ -60,7 +53,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            if (FlowLayout == null)
+            if (CollectionViewFlowLayout == null)
             {
                 return;
             }
@@ -72,8 +65,8 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 			CollectionViewExtended.BackgroundColor = UIColor.White;
             CollectionViewExtended.RegisterCell<ItemCell>();
-  //          CollectionViewExtended.RegisterHeader<CollectionViewHeader>();
-             CollectionViewExtended.RegisterFooter<CollectionViewFooter>();
+            CollectionViewExtended.RegisterHeader<CollectionViewHeader>();
+            CollectionViewExtended.RegisterFooter<CollectionViewFooter>();
             CollectionViewExtended.AlwaysBounceVertical = true;
             CollectionViewExtended.AllowsMultipleSelection = true;
             CollectionViewExtended.AddSubview(toolbar);
@@ -82,20 +75,21 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
             {
                 toolbarBottomConstraint.Constant = toolbar.Bounds.Height;
             }
-            SyncWithViewModel(false);
+            SyncWithViewModel();
         }
 
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
-            if (FlowLayout == null)
+            if (CollectionViewFlowLayout == null)
             {
                 return;
             }
-            FlowLayout.ItemSize = new CGSize(View.Bounds.Width, 64);
-            FlowLayout.HeaderReferenceSize = new CGSize(View.Bounds.Width, 44f);
-            FlowLayout.FooterReferenceSize = new CGSize(View.Bounds.Width,
-                CollectionViewExtended.Frame.Height - viewModel.NumberOfItems(0) * FlowLayout.ItemSize.Height);
+            CollectionViewFlowLayout.ItemSize = new CGSize(View.Bounds.Width, 64);
+            CollectionViewFlowLayout.HeaderReferenceSize = new CGSize(View.Bounds.Width, 44f);
+            CollectionViewFlowLayout.FooterReferenceSize = new CGSize(View.Bounds.Width,
+                CollectionViewExtended.Frame.Height -
+                viewModel.NumberOfItems(0) * CollectionViewFlowLayout.ItemSize.Height);
             if (isFirstLayout)
             {
                 isFirstLayout = false;
@@ -103,7 +97,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
             }
         }
 
-        private void SyncWithViewModel(bool animated)
+        private void SyncWithViewModel()
         {
             if (toolbar?.Items != null)
             {
@@ -125,10 +119,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
                     };
             if (editBarButtonItem != null)
             {
-                editBarButtonItem.Clicked += (sender, args) =>
-                {
-                    // TODO
-                };
+                editBarButtonItem.Clicked += HandleEditButtonTap;
                 editBarButtonItem.Enabled = viewModel.IsEditActionEnabled;
             }
             this.SetActiveRightBarButtonItem(editBarButtonItem);
@@ -175,10 +166,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
                 : null;
             if (selectActionButton != null)
             {
-                selectActionButton.Clicked += (sender, args) =>
-                {
-                    //TODO
-                };
+                selectActionButton.Clicked += HandleSelectButtonTap;
                 selectActionButton.Enabled = viewModel.IsSelectActionEnabled;
             }
             var deleteActionButton = !viewModel.IsDeleteActionHidden
@@ -192,10 +180,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
             if (deleteActionButton != null)
             {
                 deleteActionButton.Enabled = viewModel.IsDeleteActionEnabled;
-                deleteActionButton.Clicked += (sender, args) =>
-                {
-                    // TODO
-                };
+                deleteActionButton.Clicked += HandleDeleteButtonTap;
             }
             toolbar.Items = new[]
             {
@@ -205,8 +190,25 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
             };
         }
 
+        private void HandleDeleteButtonTap(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void HandleSelectButtonTap(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void HandleEditButtonTap(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
+            // TODO
+            //viewModel.SearchQuery = searchController.SearchBar.Text;
         }
     }
 }

@@ -45,6 +45,7 @@
     <Compile Include="Config\CustomErrors.cs" />
     <Compile Include="CustomViews\CheckmarkButton.cs" />
     <Compile Include="CustomViews\CollectionViewFooter.cs" />
+    <Compile Include="CustomViews\CollectionViewHeader.cs" />
     <Compile Include="CustomViews\ColorPallete.cs" />
     <Compile Include="CustomViews\IEditable.cs" />
     <Compile Include="CustomViews\ItemCell.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Config\TypeFilter.cs" />
     <Compile Include="ViewControllers\DirectoryViewController.cs" />
     <Compile Include="ViewControllers\ErrorViewController.cs" />
+    <Compile Include="ViewControllers\IDirectoryContentViewControllerDelegate.cs" />
     <Compile Include="ViewControllers\IDirectoryViewControllerDelegate.cs" />
     <Compile Include="ViewControllers\IFileExplorerViewControllerDelegate.cs" />
     <Compile Include="ViewControllers\LoadingViewController.cs" />
