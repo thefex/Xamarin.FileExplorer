@@ -25,9 +25,10 @@ namespace Xamarin.iOS.FileExplorer.PresentationController
 			switch (item.Type)
 			{
 				case ItemType.Directory:
-					var coordinator = new DirectoryItemPresentationCoordinator<object>(_navigationController, fileSpecifications,
+					var coordinator = new DirectoryItemPresentationCoordinator(_navigationController, fileSpecifications,
 						configuration);
 					coordinator.Start(item.Url, true);
+					break;
 					
 
 			}
