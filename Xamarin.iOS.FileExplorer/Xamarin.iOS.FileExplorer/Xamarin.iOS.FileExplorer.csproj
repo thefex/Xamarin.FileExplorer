@@ -97,6 +97,7 @@
     <Compile Include="ViewControllers\DirectoryViewController.cs" />
     <Compile Include="ViewControllers\ErrorViewController.cs" />
     <Compile Include="ViewControllers\IDirectoryViewControllerDelegate.cs" />
+    <Compile Include="ViewControllers\IFileExplorerViewControllerDelegate.cs" />
     <Compile Include="ViewControllers\LoadingViewController.cs" />
     <Compile Include="ViewControllers\UnknownFileTypeViewController.cs" />
     <Compile Include="ViewControllers\ActionsViewController.cs" />

@@ -12,7 +12,7 @@ using Xamarin.iOS.FileExplorer.Services.File;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-	public class FileExplorerViewController : UIViewController
+	public class FileExplorerViewController : UIViewController, IItemsPresentationCoordinatorDelegate
 	{
 		public Uri InitialDirectoryOfUrl { get; set; } = NSUrlExtensions.DocumentDirectory;
 
@@ -58,8 +58,10 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 			var navigationController = new UINavigationController();
 			this.AddContentChildViewController(navigationController, new UIEdgeInsets());
-			itemPresentationCoordinator = new ItemPresentationCoordinator(navigationController);
-			
+			itemPresentationCoordinator = new ItemPresentationCoordinator(navigationController)
+			{
+				Delegate = this
+			};
 		}
 
 		public override void ViewWillAppear(bool animated)
@@ -103,18 +105,18 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			itemPresentationCoordinator.Stop(false);
 		}
 
-		public event Action Finished;
-
-		protected virtual void OnFinished()
+		public void Finished(ItemPresentationCoordinator coordinator)
 		{
-			Finished?.Invoke();
+			DismissViewController(true, null);
+			Delegate?.Finished(this);
 		}
 
-		public event Action<IEnumerable<NSUrl>> FilesChoosed;
-
-		protected virtual void OnFilesChoosed(IEnumerable<NSUrl> obj)
+		public void ItemsPicked(ItemPresentationCoordinator coordinator, IEnumerable<Item<object>> pickedItems)
 		{
-			FilesChoosed?.Invoke(obj);
+			DismissViewController(true, null);
+			Delegate?.ChoosedURLs(this, pickedItems.Select(x => x.Url).ToArray());
 		}
+
+		public IFileExplorerViewControllerDelegate Delegate { get; set; }
 	}
 }
