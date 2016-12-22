@@ -27,6 +27,11 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
             Initialize();
         }
 
+	    public CollectionViewHeader(IntPtr ptr) : base(ptr)
+	    {
+		    Initialize();
+	    }
+
         private void Initialize()
         {
             segmentedControl = new UISegmentedControl(new object[] {"Name", "Date"});

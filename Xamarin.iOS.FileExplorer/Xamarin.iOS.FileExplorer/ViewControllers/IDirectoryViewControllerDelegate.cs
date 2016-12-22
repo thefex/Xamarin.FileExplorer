@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.PresentationController;
 
@@ -9,7 +10,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 		void ItemDetailsSelected(Item<object> selectedItem);
 
-		void ItemsPicked(Item<object> items);
+		void ItemsPicked(IEnumerable<Item<object>> items);
 
 		void Finished(DirectoryViewController directoryVc);
 	}

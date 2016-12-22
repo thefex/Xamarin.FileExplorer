@@ -277,7 +277,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			}
 			else if (elementKind == UICollectionElementKindSectionKey.Footer)
 			{
-				return CollectionViewExtended.DequeueReusableHeader<CollectionViewFooter>(typeof(CollectionViewFooter), indexPath);
+				return CollectionViewExtended.DequeueReusableFooter<CollectionViewFooter>(typeof(CollectionViewFooter), indexPath);
 			}
 
 			throw new InvalidOperationException("ElementKind is not registered.");
