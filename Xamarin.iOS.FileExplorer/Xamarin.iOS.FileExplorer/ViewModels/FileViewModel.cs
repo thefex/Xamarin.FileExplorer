@@ -33,7 +33,7 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
             };
         }
 
-        private UIImage ThumbnailImage(CGSize size)
+        public UIImage ThumbnailImage(CGSize size)
         {
             switch (item.Type)
             {

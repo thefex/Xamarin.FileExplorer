@@ -43,12 +43,15 @@
     <Compile Include="Config\ActionsConfiguration.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\CustomErrors.cs" />
+    <Compile Include="CustomViews\AttributesColumnView.cs" />
+    <Compile Include="CustomViews\AttributesView.cs" />
     <Compile Include="CustomViews\CheckmarkButton.cs" />
     <Compile Include="CustomViews\CollectionViewFooter.cs" />
     <Compile Include="CustomViews\CollectionViewHeader.cs" />
     <Compile Include="CustomViews\ColorPallete.cs" />
     <Compile Include="CustomViews\IEditable.cs" />
     <Compile Include="CustomViews\ImageAssets.cs" />
+    <Compile Include="CustomViews\ImageView.cs" />
     <Compile Include="CustomViews\ItemCell.cs" />
     <Compile Include="CustomViews\LayoutConstants.cs" />
     <Compile Include="CustomViews\SeparatorView.cs" />
@@ -99,6 +102,8 @@
     <Compile Include="Config\TypeFilter.cs" />
     <Compile Include="ViewControllers\DirectoryViewController.cs" />
     <Compile Include="ViewControllers\ErrorViewController.cs" />
+    <Compile Include="ViewControllers\FileViewController.cs" />
+    <Compile Include="CustomViews\TitleView.cs" />
     <Compile Include="ViewModels\FileAttributeViewModel.cs" />
     <Compile Include="ViewModels\FileViewModel.cs" />
     <Compile Include="ViewControllers\IDirectoryContentViewControllerDelegate.cs" />
