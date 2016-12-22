@@ -15,8 +15,9 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			Initialize();
 		}
 
-		protected internal CollectionViewFooter(IntPtr handle) : base(handle)
+		public CollectionViewFooter(IntPtr handle) : base(handle)
 		{
+			Initialize();
 		}
 
 		public CollectionViewFooter(CGRect frame) : base(frame)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Foundation;
 using UIKit;
 using Xamarin.iOS.FileExplorer.Data;
@@ -122,9 +123,10 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			Delegate?.ItemDetailsSelected(item);
 		}
 
-		public void ChoosedItems(DirectoryContentViewController controller, Item<object> item)
+		public void ChoosedItems(DirectoryContentViewController controller, IEnumerable<Item<object>> items)
 		{
-			Delegate?.ItemsPicked(item);
+			Delegate?.ItemsPicked(items);
 		}
+
 	}
 }
