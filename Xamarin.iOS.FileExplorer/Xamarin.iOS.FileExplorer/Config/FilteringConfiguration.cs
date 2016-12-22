@@ -5,8 +5,8 @@ namespace Xamarin.iOS.FileExplorer.Config
 {
 	public class FilteringConfiguration
 	{
-		public IEnumerable<string> FileFilters { get; set; } = Enumerable.Empty<string>();
+		public IEnumerable<Filter> FileFilters { get; set; } = Enumerable.Empty<Filter>();
 
-		public IEnumerable<string> IgnoredFileFilters { get; set; } = Enumerable.Empty<string>();
+		public IEnumerable<Filter> IgnoredFileFilters { get; set; } = Enumerable.Empty<Filter>();
 	}
 }

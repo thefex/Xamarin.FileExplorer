@@ -63,7 +63,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 			this.AddContentChildViewController(directoryContentViewController, new UIEdgeInsets(searchController.SearchBar.Bounds.Height, 0,0,0));
 			NavigationItem.RightBarButtonItem = directoryContentViewController.NavigationItem.RightBarButtonItem;
 			NavigationItem.Title = directoryContentViewController.NavigationItem.Title;
-			Add(directoryContentViewController.View);
+			View.SendSubviewToBack(directoryContentViewController.View);
 			SetupLeftBarButtonItem();
 		}
 

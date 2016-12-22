@@ -35,6 +35,27 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
             _fileSpecifications = fileSpecifications;
             this.configuration = configuration;
             _fileService = fileService;
+
+	        var filterConfig = configuration.FilteringConfiguration;
+	        var allItems = loadedDirectoryItem.Resource as IEnumerable<Item<object>>;
+	        bool hasAnyFileFIlters = filterConfig.FileFilters.Any();
+	        _allItems =
+		        allItems.Where(
+			        x => !hasAnyFileFIlters || filterConfig.FileFilters.Any(filter => filter.MatchesItem<object>(x))).ToList();
+
+	        _itemsToDisplay = DirectoryContentViewModel.GetItemsWithAppliedFilterAndSortCriterias(string.Empty, SortMode,_allItems).ToList();
+
+	        NSNotificationCenter.DefaultCenter.AddObserver(new NSString("ItemsDeleted"), notifiaction =>
+	        {
+		        var deletedItems = notifiaction.Object as IEnumerable<Item<object>>;
+		        if (deletedItems == null)
+			        return;
+
+		        foreach (var deletedItem in deletedItems)
+			        Remove(deletedItem);
+
+		        Delegate?.ListChanged(this);
+	        });
         }
 
 

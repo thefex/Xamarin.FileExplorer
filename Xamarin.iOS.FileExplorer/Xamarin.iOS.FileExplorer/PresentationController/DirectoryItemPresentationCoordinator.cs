@@ -10,7 +10,7 @@ using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.PresentationController
 {
-	public class DirectoryItemPresentationCoordinator : IDirectoryItemsPresentationCoordinatorDelegate
+	public class DirectoryItemPresentationCoordinator : IDirectoryItemsPresentationCoordinatorDelegate, IDirectoryViewControllerDelegate
 	{
 		DirectoryViewController _directoryViewController;
  
@@ -44,8 +44,7 @@ namespace Xamarin.iOS.FileExplorer.PresentationController
 					loadedItem =>
 					{
 						var viewModel = new DirectoryViewModel(loadedItem.Url, loadedItem, _fileSpecifications, _configuration, finishButtonHidden);
-						var directoryViewController = new DirectoryViewController(viewModel);
-						// delegate
+						var directoryViewController = new DirectoryViewController(viewModel) {Delegate = this};
 						_directoryViewController = directoryViewController;
 
 						return directoryViewController;
@@ -78,6 +77,30 @@ namespace Xamarin.iOS.FileExplorer.PresentationController
 		public void Finished(DirectoryItemPresentationCoordinator coordinator)
 		{
 			Delegate?.Finished(coordinator);
+		}
+
+		public void ItemSelected(Item<object> selectedItem)
+		{
+			if (_directoryViewController!=null)
+				_directoryViewController.IsSearchControllerActive = false;
+			Delegate?.ItemSelected(this, selectedItem);
+		}
+
+		public void ItemDetailsSelected(Item<object> selectedItem)
+		{
+			if (_directoryViewController != null)
+				_directoryViewController.IsSearchControllerActive = false;
+			Delegate?.ItemDetailsSelected(this, selectedItem);
+		}
+
+		public void ItemsPicked(IEnumerable<Item<object>> items)
+		{
+			Delegate?.ItemsPicked(this, items);
+		}
+
+		public void Finished(DirectoryViewController directoryVc)
+		{
+			Delegate?.Finished(this);
 		}
 	}
 }
