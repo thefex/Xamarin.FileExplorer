@@ -9,7 +9,7 @@ using Xamarin.iOS.FileExplorer.ViewModels;
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
     public class DirectoryContentViewController : UICollectionViewController, 
-                                                  IUISearchResultsUpdating
+                                                  IUISearchResultsUpdating, IDirectoryViewControllerDelegate
     {
         public IDirectoryContentViewControllerDelegate Delegate { get; set; }
 
@@ -195,7 +195,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         private void HandleEditButtonTap(object sender, EventArgs e)
         {
             viewModel.IsEditing = !viewModel.IsEditing;
-            Delegate.DirectoryContentViewControllerChangedEditingStatus(this, viewModel.IsEditing);
+            Delegate.ChangedEditingStatus(this, viewModel.IsEditing);
         }
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)

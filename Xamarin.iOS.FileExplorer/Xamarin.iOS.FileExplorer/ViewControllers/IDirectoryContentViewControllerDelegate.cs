@@ -4,9 +4,9 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
     public interface IDirectoryContentViewControllerDelegate
     {
-        void DirectoryContentViewControllerChangedEditingStatus(DirectoryContentViewController controller, bool isEditing);
-        void DirectoryContentViewControllerSelectedItem(DirectoryContentViewController controller, Item<object> item);
-        void DirectoryContentViewControllerSelectedItemDetails(DirectoryContentViewController controller, Item<object> item);
-        void DirectoryContentViewControllerChoosedItems(DirectoryContentViewController controller, Item<object> item);
+        void ChangedEditingStatus(DirectoryContentViewController controller, bool isEditing);
+        void SelectedItem(DirectoryContentViewController controller, Item<object> item);
+        void SelectedItemDetails(DirectoryContentViewController controller, Item<object> item);
+        void ChoosedItems(DirectoryContentViewController controller, Item<object> item);
     }
 }
