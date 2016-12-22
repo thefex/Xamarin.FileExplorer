@@ -11,7 +11,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
     public class DirectoryContentViewController : UICollectionViewController, 
                                                   IUISearchResultsUpdating
     {
-        public IDirectoryContentViewControllerDelegate DirectoryContentViewControllerDelegate { get; set; }
+        public IDirectoryContentViewControllerDelegate Delegate { get; set; }
 
         private readonly DirectoryContentViewModel viewModel;
         private UIToolbar toolbar;
@@ -19,7 +19,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         bool isFirstLayout = true;
         private UICollectionViewExtended CollectionViewExtended;
 
-        public UICollectionViewFlowLayout CollectionViewFlowLayout
+        public UICollectionViewFlowLayout CollectionViewLayout
             => CollectionView?.CollectionViewLayout as UICollectionViewFlowLayout;
 
         public DirectoryContentViewController(DirectoryContentViewModel viewModel) :
@@ -34,14 +34,6 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         {
         }
 
-        protected DirectoryContentViewController(NSObjectFlag t) : base(t)
-        {
-        }
-
-        protected internal DirectoryContentViewController(IntPtr handle) : base(handle)
-        {
-        }
-
         public DirectoryContentViewController(string nibName, NSBundle bundle) : base(nibName, bundle)
         {
         }
@@ -53,7 +45,7 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            if (CollectionViewFlowLayout == null)
+            if (CollectionViewLayout == null)
             {
                 return;
             }
@@ -81,15 +73,15 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
-            if (CollectionViewFlowLayout == null)
+            if (CollectionViewLayout == null)
             {
                 return;
             }
-            CollectionViewFlowLayout.ItemSize = new CGSize(View.Bounds.Width, 64);
-            CollectionViewFlowLayout.HeaderReferenceSize = new CGSize(View.Bounds.Width, 44f);
-            CollectionViewFlowLayout.FooterReferenceSize = new CGSize(View.Bounds.Width,
+            CollectionViewLayout.ItemSize = new CGSize(View.Bounds.Width, 64);
+            CollectionViewLayout.HeaderReferenceSize = new CGSize(View.Bounds.Width, 44f);
+            CollectionViewLayout.FooterReferenceSize = new CGSize(View.Bounds.Width,
                 CollectionViewExtended.Frame.Height -
-                viewModel.NumberOfItems(0) * CollectionViewFlowLayout.ItemSize.Height);
+                viewModel.NumberOfItems(0) * CollectionViewLayout.ItemSize.Height);
             if (isFirstLayout)
             {
                 isFirstLayout = false;
@@ -202,13 +194,13 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
         private void HandleEditButtonTap(object sender, EventArgs e)
         {
-            // TODO
+            viewModel.IsEditing = !viewModel.IsEditing;
+            Delegate.DirectoryContentViewControllerChangedEditingStatus(this, viewModel.IsEditing);
         }
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
-            // TODO
-            //viewModel.SearchQuery = searchController.SearchBar.Text;
+
         }
     }
 }
