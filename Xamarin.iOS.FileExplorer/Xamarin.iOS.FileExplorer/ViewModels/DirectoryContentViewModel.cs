@@ -65,17 +65,34 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 			    Delegate?.Changed(this);
 		    }
 	    }
-	    public string SearchQuery { get; set; }
 
-	    public bool IsDeleteActionEnabled { get; set; }
-	    public bool IsEditActionHidden { get; set; }
-	    public string IsEditActionTitle { get; set; }
-	    public bool IsEditActionEnabled { get; set; }
+	    private string searchQuery;
+	    public string SearchQuery
+	    {
+		    get { return searchQuery; }
+		    set
+		    {
+			    _itemsToDisplay = GetItemsWithAppliedFilterAndSortCriterias(searchQuery, SortMode, _allItems).ToList();
+			    Delegate?.ListChanged(this);
+		    }
+	    }
+
+	    public bool IsEditActionHidden
+		    =>
+			    !configuration.ActionsConfiguration.CanChooseFiles && !configuration.ActionsConfiguration.CanChooseDirectories &&
+			    !configuration.ActionsConfiguration.CanRemoveFiles && !configuration.ActionsConfiguration.CanRemoveDirectories;
+
+	    public string IsEditActionTitle => IsEditing ? "Cancel" : "Select";
+
+	    public bool IsEditActionEnabled
+		    => !IsEditActionHidden && !_fileService.IsDeletionInProgress;
 
 	    public bool IsSelectActionHidden
 		    => !configuration.ActionsConfiguration.CanChooseFiles && !configuration.ActionsConfiguration.CanChooseDirectories;
 
 	    public string SelectActionTitle => "Choose";
+
+	    public bool IsSelectionEnabled => IsEditing;
 
 	    public bool IsSelectActionEnabled
 	    {
@@ -96,8 +113,31 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 			    return !_fileService.IsDeletionInProgress && numberOfSelectedItemsAllowed;
 		    }
 	    }
-        public string DeleteActionTitle { get; set; }
-        public bool IsDeleteActionHidden { get; set; }
+
+	    public bool IsDeleteActionHidden
+		    => !configuration.ActionsConfiguration.CanRemoveDirectories && !configuration.ActionsConfiguration.CanRemoveFiles;
+
+
+		public string DeleteActionTitle => "Delete";
+
+	    public bool IsDeleteActionEnabled
+	    {
+		    get
+		    {
+				if (_selectedItems.Count == 0 || IsDeleteActionHidden)
+					return false;
+
+				if (!configuration.ActionsConfiguration.CanRemoveDirectories && _selectedItems.Any(x => x.Type == ItemType.Directory))
+					return false;
+
+				if (!configuration.ActionsConfiguration.CanRemoveFiles && _selectedItems.Any(x => x.Type == ItemType.File))
+					return false;
+
+			    return !_fileService.IsDeletionInProgress;
+		    }
+	    }
+
+	    public IEnumerable<NSIndexPath> IndexPathsOfSelectedCells => _selectedItems.Select(IndexFor);
 
 	    public void Select(NSIndexPath path)
 	    {
