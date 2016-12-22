@@ -4,6 +4,8 @@ namespace Xamarin.iOS.FileExplorer.Data
 {
 	public class LoadedItem<T>
 	{
+        public string Name { get; }
+
 		public NSUrl Url { get; }
 
 		public ItemType Type { get; }
@@ -13,6 +15,7 @@ namespace Xamarin.iOS.FileExplorer.Data
 
 		public LoadedItem(Item<T> item, NSFileAttributes attributes, T resource)
 		{
+		    Name = item.Name;
 			Url = item.Url;
 			Type = item.Type;
 			Attributes = attributes;
