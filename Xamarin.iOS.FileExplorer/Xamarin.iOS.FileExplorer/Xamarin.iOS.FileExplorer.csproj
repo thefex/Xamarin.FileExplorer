@@ -48,6 +48,7 @@
     <Compile Include="CustomViews\CollectionViewHeader.cs" />
     <Compile Include="CustomViews\ColorPallete.cs" />
     <Compile Include="CustomViews\IEditable.cs" />
+    <Compile Include="CustomViews\ImageAssets.cs" />
     <Compile Include="CustomViews\ItemCell.cs" />
     <Compile Include="CustomViews\LayoutConstants.cs" />
     <Compile Include="CustomViews\SeparatorView.cs" />

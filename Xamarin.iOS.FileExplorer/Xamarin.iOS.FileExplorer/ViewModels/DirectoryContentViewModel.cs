@@ -13,7 +13,7 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
     {
         private IList<Item<object>> _selectedItems = new List<Item<object>>();
         private readonly IList<Item<object>> _allItems = new List<Item<object>>();
-        private IEnumerable<Item<object>> _itemsToDisplay = new List<Item<object>>();
+        private IList<Item<object>> _itemsToDisplay = new List<Item<object>>();
         private readonly NSUrl url;
         private readonly Configuration configuration = new Configuration();
         private readonly FileSpecifications _fileSpecifications;
@@ -45,7 +45,7 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 		    set
 		    {
 			    sortMode = value;
-			    _itemsToDisplay = DirectoryContentViewModel.GetItemsWithAppliedFilterAndSortCriterias(SearchQuery, SortMode, _allItems);
+			    _itemsToDisplay = DirectoryContentViewModel.GetItemsWithAppliedFilterAndSortCriterias(SearchQuery, SortMode, _allItems).ToList();
 		    }
 	    }
 
@@ -71,16 +71,71 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 	    public bool IsEditActionHidden { get; set; }
 	    public string IsEditActionTitle { get; set; }
 	    public bool IsEditActionEnabled { get; set; }
-	    public bool IsSelectActionHidden { get; set; }
-        public string SelectActionTitle { get; set; }
-        public bool IsSelectActionEnabled { get; set; }
+
+	    public bool IsSelectActionHidden
+		    => !configuration.ActionsConfiguration.CanChooseFiles && !configuration.ActionsConfiguration.CanChooseDirectories;
+
+	    public string SelectActionTitle => "Choose";
+
+	    public bool IsSelectActionEnabled
+	    {
+		    get
+		    {
+				if (_selectedItems.Count == 0 || IsSelectActionHidden)
+					return false;
+
+				if (!configuration.ActionsConfiguration.CanChooseDirectories && _selectedItems.Any(x => x.Type == ItemType.Directory))
+					return false;
+
+				if (!configuration.ActionsConfiguration.CanChooseFiles && _selectedItems.Any(x => x.Type == ItemType.File))
+					return false;
+
+			    bool numberOfSelectedItemsAllowed = configuration.ActionsConfiguration.AllowsMultipleSelection
+				    ? _selectedItems.Count > 0
+				    : _selectedItems.Count == 1;
+			    return !_fileService.IsDeletionInProgress && numberOfSelectedItemsAllowed;
+		    }
+	    }
         public string DeleteActionTitle { get; set; }
         public bool IsDeleteActionHidden { get; set; }
 
-        public nfloat NumberOfItems(int section)
-        {
-            return _itemsToDisplay.Count;
-        }
+	    public void Select(NSIndexPath path)
+	    {
+		    var item = ItemFor(path);
+		    if (IsEditing)
+			    _selectedItems.Add(item);
+		    else
+			    Delegate?.ItemSelected(item);
+
+		    Delegate?.Changed(this);
+	    }
+
+	    public void Deselect(NSIndexPath atIndexPath)
+	    {
+		    var item = ItemFor(atIndexPath);
+		    if (IsEditing)
+			    _selectedItems.Remove(item);
+		    else
+			    Delegate?.ItemSelected(item);
+
+		    Delegate?.Changed(this);
+	    }
+
+	    public void DeleteItems(IEnumerable<NSIndexPath> atIndexPaths, Action<DeleteResult<object>> onRemovedAction)
+	    {
+		    var items = atIndexPaths.Select(ItemFor).ToList();
+		    _fileService.Delete(items, x =>
+		    {
+			    onRemovedAction(x);
+			    Delegate?.Changed(this);
+		    });
+		    Delegate?.Changed(this);
+	    }
+
+	    public void ChooseItems(Action<IEnumerable<Item<object>>> pickedItemsAction)
+	    {
+		    pickedItemsAction(_selectedItems);
+	    }
 
 	    private static IEnumerable<Item<object>> GetItemsWithAppliedFilterAndSortCriterias(string searchQuery,
 		    SortMode sortMode, IEnumerable<Item<object>> items)
@@ -96,6 +151,41 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 
 		    return filteredItems.ToList();
 	    }
+
+	    private void Remove(Item<object> item)
+	    {
+		    _itemsToDisplay.Remove(item);
+		    _allItems.Remove(item);
+		    _selectedItems.Remove(item);
+	    }
+
+	    private NSIndexPath IndexFor(Item<object> item)
+	    {
+		    var itemWithIndex = _allItems.Select((x, index) => new
+		    {
+			    Item = x,
+			    Index = index
+		    }).FirstOrDefault(x => x.Item == item);
+
+		    if (itemWithIndex == null)
+			    throw new InvalidOperationException("Item does not exist.");
+
+		    return NSIndexPath.FromItemSection(itemWithIndex.Index, 0);
+	    }
+
+	    public int NumberOfItems(int section)
+	    {
+		    return _itemsToDisplay.Count();
+	    }
+
+	    public ItemViewModel ItemViewModelFor(NSIndexPath indexPath)
+	    {
+		    var item = ItemFor(indexPath);
+		    return new ItemViewModel(item, _fileSpecifications.GetFileSpecificationProvider<object>(item));
+	    }
+
+	    public Item<object> ItemFor(NSIndexPath indexPath)
+		    => _itemsToDisplay[(int)indexPath.Item];
 
 		public IDirectoryContentViewModelDelegate Delegate { get; set; }
     }
