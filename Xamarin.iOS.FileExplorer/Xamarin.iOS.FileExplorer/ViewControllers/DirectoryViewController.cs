@@ -1,12 +1,13 @@
 using System;
 using Foundation;
 using UIKit;
+using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
-	public class DirectoryViewController : UIViewController, IUISearchBarDelegate
+	public class DirectoryViewController : UIViewController, IUISearchBarDelegate, IDirectoryContentViewControllerDelegate
 	{
 		private DirectoryViewModel viewModel;
 
@@ -29,6 +30,9 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 			directoryContentViewModel = viewModel.BuildDirectoryContentViewModel();
 			directoryContentViewController = new DirectoryContentViewController(directoryContentViewModel);
+
+			searchResultsViewController.Delegate = this;
+			directoryContentViewController.Delegate = this;
 		}
 
 		public DirectoryViewController(NSCoder coder) : base(coder)
@@ -102,6 +106,25 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 		public IDirectoryViewControllerDelegate Delegate { get; set; }
 
-		 
+
+		public void ChangedEditingStatus(DirectoryContentViewController controller, bool isEditing)
+		{
+			searchController.SearchBar.SetEnabled(!isEditing);
+		}
+
+		public void SelectedItem(DirectoryContentViewController controller, Item<object> item)
+		{
+			Delegate?.ItemSelected(item);
+		}
+
+		public void SelectedItemDetails(DirectoryContentViewController controller, Item<object> item)
+		{
+			Delegate?.ItemDetailsSelected(item);
+		}
+
+		public void ChoosedItems(DirectoryContentViewController controller, Item<object> item)
+		{
+			Delegate?.ItemsPicked(item);
+		}
 	}
 }
