@@ -26,9 +26,9 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
 		public bool AllowsMultipleSelection { get; set; } = true;
 
-		public IEnumerable<string> FileFilters { get; set; } = Enumerable.Empty<string>();
+		public IEnumerable<Filter> FileFilters { get; set; } = Enumerable.Empty<Filter>();
 
-		public IEnumerable<string> IgnoredFileFilters { get; set; } = Enumerable.Empty<string>();
+		public IEnumerable<Filter> IgnoredFileFilters { get; set; } = Enumerable.Empty<Filter>();
 
 		public IEnumerable<IFileSpecificationProvider> CustomSpecificationProviders { get; }
 
