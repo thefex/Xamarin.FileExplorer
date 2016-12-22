@@ -9,7 +9,8 @@ using Xamarin.iOS.FileExplorer.ViewModels;
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
     public class DirectoryContentViewController : UICollectionViewController, 
-                                                  IUISearchResultsUpdating, IDirectoryViewControllerDelegate
+                                                  IUISearchResultsUpdating
+                                                //  IDirectoryViewControllerDelegate
     {
         public IDirectoryContentViewControllerDelegate Delegate { get; set; }
 
