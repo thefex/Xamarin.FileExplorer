@@ -187,27 +187,41 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
 
         private void HandleDeleteButtonTap(object sender, EventArgs e)
         {
-            // TODO
+            this.ShowLoadingIndicator();
+            viewModel.DeleteItems(viewModel.IndexPathsOfSelectedCells, result =>
+            {
+                this.HideLoadingIndicator();
+                if (!result.IsSuccess)
+                {
+                    this.PresentAlert(result.ErrorMessage);
+                }
+                viewModel.IsEditing = false;
+                Delegate?.ChangedEditingStatus(this, viewModel.IsEditing);
+            });
         }
 
         private void HandleSelectButtonTap(object sender, EventArgs e)
         {
-            // TODO
+            viewModel.ChooseItems(selectedItems =>
+            {
+                Delegate?.ChoosedItems(this, selectedItems);
+            });
         }
 
         private void HandleEditButtonTap(object sender, EventArgs e)
         {
             viewModel.IsEditing = !viewModel.IsEditing;
-            Delegate.ChangedEditingStatus(this, viewModel.IsEditing);
+            Delegate?.ChangedEditingStatus(this, viewModel.IsEditing);
         }
 
         public void UpdateSearchResultsForSearchController(UISearchController searchController)
         {
-
+            UpdateSearchResultsForSearchController(searchController);
+            viewModel.SearchQuery = searchController.SearchBar.Text;
         }
 
 
-	    public void ListChanged(DirectoryContentViewModel viewModel)
+        public void ListChanged(DirectoryContentViewModel viewModel)
 	    {
 		    CollectionView?.ReloadData();
 	    }
