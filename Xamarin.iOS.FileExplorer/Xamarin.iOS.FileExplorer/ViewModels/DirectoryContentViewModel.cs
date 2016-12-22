@@ -228,6 +228,7 @@ namespace Xamarin.iOS.FileExplorer.ViewModels
 		    => _itemsToDisplay[(int)indexPath.Item];
 
 		public IDirectoryContentViewModelDelegate Delegate { get; set; }
+	    public nint NumberOfSections => 1;
     }
 
 	public interface IDirectoryContentViewModelDelegate

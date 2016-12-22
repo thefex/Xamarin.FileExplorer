@@ -111,6 +111,8 @@ namespace Xamarin.iOS.FileExplorer.CustomViews
 			}
 		}
 
+		public Action TapAction { get; set; } = () => { };
+
 		public void SetEditing(bool editing, bool animated)
 		{
 			if (animated)

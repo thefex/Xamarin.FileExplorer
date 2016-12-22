@@ -1,16 +1,18 @@
 using System;
+using System.Linq;
 using CoreGraphics;
 using Foundation;
 using UIKit;
 using Xamarin.iOS.FileExplorer.CustomViews;
+using Xamarin.iOS.FileExplorer.Data;
 using Xamarin.iOS.FileExplorer.Extensions;
 using Xamarin.iOS.FileExplorer.ViewModels;
 
 namespace Xamarin.iOS.FileExplorer.ViewControllers
 {
     public class DirectoryContentViewController : UICollectionViewController, 
-                                                  IUISearchResultsUpdating
-                                                //  IDirectoryViewControllerDelegate
+                                                  IUISearchResultsUpdating,
+                                                  IDirectoryContentViewModelDelegate
     {
         public IDirectoryContentViewControllerDelegate Delegate { get; set; }
 
@@ -203,5 +205,80 @@ namespace Xamarin.iOS.FileExplorer.ViewControllers
         {
 
         }
-    }
+
+
+	    public void ListChanged(DirectoryContentViewModel viewModel)
+	    {
+		    CollectionView?.ReloadData();
+	    }
+
+	    public void Changed(DirectoryContentViewModel viewModel)
+	    {
+		    SyncWithViewModel();
+	    }
+
+	    public void ItemSelected(Item<object> selectedItem)
+	    {
+		    Delegate?.SelectedItem(this, selectedItem);
+	    }
+
+		public override nint NumberOfSections(UICollectionView collectionView)
+		{
+			return viewModel.NumberOfSections;
+		}
+
+		public override nint GetItemsCount(UICollectionView collectionView, nint section)
+		{
+			return viewModel.NumberOfItems((int)section);
+		}
+
+		public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			var cell = collectionView.DequeueReusableCell(typeof(ItemCell).ToString(), indexPath) as ItemCell;
+			var itemViewModel = viewModel.ItemViewModelFor(indexPath);
+
+			cell.TapAction = () =>
+			{
+				Delegate?.SelectedItemDetails(this, viewModel.ItemFor(indexPath));
+			};
+			cell.Selected = viewModel.IndexPathsOfSelectedCells.Any(x => x == indexPath);
+			cell.Title = itemViewModel.Title;
+			cell.Subtitle = itemViewModel.Subtitle;
+			cell.Accessory = itemViewModel.Accessory;
+			cell.IconImage = itemViewModel.GetThumbnailImage(cell.MaximumIconSize);
+			return cell;
+		}
+
+		public override UICollectionReusableView GetViewForSupplementaryElement(UICollectionView collectionView, NSString elementKind, NSIndexPath indexPath)
+		{
+			if (elementKind == UICollectionElementKindSectionKey.Header)
+			{
+				var header = CollectionViewExtended.DequeueReusableHeader<CollectionViewHeader>(typeof(CollectionViewHeader), indexPath) as CollectionViewHeader;
+				// sort mode
+				UIView.PerformWithoutAnimation(() =>
+				{
+					header.LayoutIfNeeded();
+				});
+				return header;
+			}
+			else if (elementKind == UICollectionElementKindSectionKey.Footer)
+			{
+				return CollectionViewExtended.DequeueReusableHeader<CollectionViewFooter>(typeof(CollectionViewFooter), indexPath);
+			}
+
+			throw new InvalidOperationException("ElementKind is not registered.");
+		}
+
+		public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			viewModel.Select(indexPath);
+			if (!viewModel.IsSelectionEnabled)
+				collectionView.DeselectItem(indexPath, false);
+		}
+
+		public override void ItemDeselected(UICollectionView collectionView, NSIndexPath indexPath)
+		{
+			viewModel.Deselect(indexPath);
+		}
+	}
 }
